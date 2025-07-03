@@ -1,21 +1,18 @@
 import InvestmentResultRow from "./InvestmentResultRow";
 import { calculateInvestmentResults } from "../util/investment";
 
-export default function InvestmentResult({
-  initialInvestment,
-  annualInvestment,
-  expectedReturn,
-  duration,
-}) {
+export default function InvestmentResult({ input }) {
   const results = calculateInvestmentResults({
-    initialInvestment: parseFloat(initialInvestment),
-    annualInvestment: parseFloat(annualInvestment),
-    expectedReturn: parseFloat(expectedReturn),
-    duration: parseInt(duration),
+    initialInvestment: input.initialInvestment,
+    annualInvestment: input.annualInvestment,
+    expectedReturn: input.expectedReturn,
+    duration: input.duration,
   });
 
-  console.log(results);
-  
+  const initialInvestment =
+    results[0].valueEndOfYear -
+    results[0].interest -
+    results[0].annualInvestment;
 
   return (
     <table id="result">
@@ -30,22 +27,20 @@ export default function InvestmentResult({
       </thead>
       <tbody>
         {results.map((result) => {
-          console.log(result);
+          const totalInterest =
+            result.valueEndOfYear -
+            result.annualInvestment * result.year -
+            initialInvestment;
 
-          console.log("result.interest + result.investedCapital");
-          console.log(typeof(result.interest));
-          console.log(typeof(result.valueEndOfYear));
-          console.log(result.valueEndOfYear);
-          
-          
-          console.log(result.interest + result.investedCapital);
+
+            const totalAmountInvested = result.valueEndOfYear - totalInterest;
           return (
             <InvestmentResultRow
               year={result.year}
-              investmentValue={result.interest + result.valueEndOfYear}
+              investmentValue={result.valueEndOfYear}
               interest={result.interest}
-              totalInterest={result.valueEndOfYear - result.annualInvestment}
-              investedCapital={result.valueEndOfYear}
+              totalInterest={totalInterest}
+              investedCapital={totalAmountInvested}
             />
           );
         })}
