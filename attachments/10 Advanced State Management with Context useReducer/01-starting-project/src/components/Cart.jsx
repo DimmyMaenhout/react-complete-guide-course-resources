@@ -1,4 +1,9 @@
-export default function Cart({ items, onUpdateItemQuantity }) {
+import { useContext } from "react"; // or use useContext, use hook is only available from react +19, in react < 19 we have to use useContext
+import { CartContext } from "../store/shopping-cart-context";
+
+export default function Cart() {
+  const { items, updateItemQuantity } = useContext(CartContext); // use hook is more flexible than the useContext hook, eg when using a hook in an if statement : if (true) { const cartCtx = use(CartContext); }
+
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -20,11 +25,11 @@ export default function Cart({ items, onUpdateItemQuantity }) {
                   <span> ({formattedPrice})</span>
                 </div>
                 <div className="cart-item-actions">
-                  <button onClick={() => onUpdateItemQuantity(item.id, -1)}>
+                  <button onClick={() => updateItemQuantity(item.id, -1)}>
                     -
                   </button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => onUpdateItemQuantity(item.id, 1)}>
+                  <button onClick={() => updateItemQuantity(item.id, 1)}>
                     +
                   </button>
                 </div>
