@@ -2,6 +2,9 @@ export async function fetchAvailablePlaces() {
   const response = await fetch('http://localhost:3000/places');
   const resData = await response.json();
 
+  console.log("http.js, fetchAvailablePlaces");
+  console.log(resData);
+
   if (!response.ok) {
     throw new Error('Failed to fetch places');
   }
@@ -12,6 +15,10 @@ export async function fetchAvailablePlaces() {
 export async function fetchUserPlaces() {
   const response = await fetch('http://localhost:3000/user-places');
   const resData = await response.json();
+
+  console.log("http.js, fetchUserPlaces");
+  console.log(resData);
+  
 
   if (!response.ok) {
     throw new Error('Failed to fetch user places');
