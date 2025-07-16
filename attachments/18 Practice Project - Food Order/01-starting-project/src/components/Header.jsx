@@ -1,10 +1,17 @@
 import logoImg from "../assets/logo.jpg";
-import { use } from "react";
-import { MealsContext } from "../store/meals-context";
+import { useContext } from "react";
+import CartContext from "../store/CartContext";
 import Button from "./UI/Button";
 
 export default function Header({ handleCartClick }) {
-  const {} = use(MealsContext);
+  const cartContext = useContext(CartContext);
+
+  const totalCartItems = cartContext.items.reduce(
+    (totalNumberOfItems, item) => {
+      return totalNumberOfItems + item.quantity;
+    },
+    0
+  );
   return (
     <header id="main-header">
       <div id="title">
@@ -13,7 +20,7 @@ export default function Header({ handleCartClick }) {
       </div>
 
       <nav>
-        <Button textOnly>{`Cart (0)`}</Button>
+        <Button textOnly>{`Cart (${totalCartItems})`}</Button>
       </nav>
     </header>
   );
