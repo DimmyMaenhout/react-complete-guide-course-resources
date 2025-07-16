@@ -40,13 +40,10 @@ export default function Checkout() {
     clearData();
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
+  async function checkoutAction(formData) {
     const customerData = Object.fromEntries(formData.entries()); // { email: test@example.com }
 
-    sendRequest(
+    await sendRequest(
       JSON.stringify({
         order: {
           items: cartContext.items,
@@ -93,7 +90,7 @@ export default function Checkout() {
       open={userProgressContext.progress === "checkout"}
       onClose={handleClose}
     >
-      <form onSubmit={handleSubmit}>
+      <form action={checkoutAction}>
         <h2>Checkout</h2>
         <p>Total amount: {currencyFormatter.format(cartTotal)}</p>
 
