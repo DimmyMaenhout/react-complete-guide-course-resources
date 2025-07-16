@@ -5,16 +5,17 @@ export default function Modal({ children, open, className = "" }) {
   const dialog = useRef();
 
   useEffect(() => {
+    const modal = dialog.current;
     if (open) {
-      dialog.current.showModal();
-    } else {
-      dialog.current.close();
+      modal.showModal();
     }
+
+    return () => modal.close();
   }, [open]);
 
   return createPortal(
-    <dialog ref={dialog} className={`modal ${className}`} onClose={onClose}>
-      {open ? children : null}
+    <dialog ref={dialog} className={`modal ${className}`}>
+      {children}
     </dialog>,
     document.getElementById("modal")
   );
