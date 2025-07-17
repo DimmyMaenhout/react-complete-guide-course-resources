@@ -1,7 +1,7 @@
 import { useSelector, useDispatch, connect } from "react-redux";
 import { Component } from "react";
 import classes from "./Counter.module.css";
-import { counterActions } from "../store/index";
+import { counterActions } from "../store/counterSlice";
 
 const Counter = () => {
   const dispatch = useDispatch(); // this gives us back a dispatch function which we can execute against our Redux store, in this case "increment" & "decrement"
