@@ -1,26 +1,45 @@
 import { useSelector, useDispatch, connect } from "react-redux";
 import { Component } from "react";
 import classes from "./Counter.module.css";
+import { counterActions } from "../store/index";
 
 const Counter = () => {
   const dispatch = useDispatch(); // this gives us back a dispatch function which we can execute against our Redux store, in this case "increment" & "decrement"
   const counter = useSelector((state) => state.counter);
   const show = useSelector((state) => state.showCounter);
 
+  // const incrementHandler = () => {
+  //   dispatch({ type: "increment" });
+  // };
+
+  // const increaseHandler = () => {
+  //   dispatch({ type: "increase", amount: 5 });
+  // };
+
+  // const decrementHandler = () => {
+  //   dispatch({ type: "decrement" });
+  // };
+
+  // const toggleCounterHandler = () => {
+  //   dispatch({ type: "toggle" });
+  // };
+
+  // example using Redux Toolkit
+
   const incrementHandler = () => {
-    dispatch({ type: "increment" });
+    dispatch(counterActions.increment());
   };
 
   const increaseHandler = () => {
-    dispatch({ type: "increase", amount: 5 });
+    dispatch(counterActions.increase({ amount: 5 })); // we can also just pass a value like 5. Redux Toolkit will make an object like this when just passing a value: { type: SOME_UNIQUE_IDENTIER, payload: 5 }. In this case we can still use action.amount in the store (index.js) otherwise we would have to call action.payload in that file
   };
 
   const decrementHandler = () => {
-    dispatch({ type: "decrement" });
+    dispatch(counterActions.decrement());
   };
 
   const toggleCounterHandler = () => {
-    dispatch({ type: "toggle" });
+    dispatch(counterActions.toggleCounter());
   };
 
   return (
