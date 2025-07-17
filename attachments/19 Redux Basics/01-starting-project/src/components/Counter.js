@@ -5,8 +5,8 @@ import { counterActions } from "../store/index";
 
 const Counter = () => {
   const dispatch = useDispatch(); // this gives us back a dispatch function which we can execute against our Redux store, in this case "increment" & "decrement"
-  const counter = useSelector((state) => state.counter);
-  const show = useSelector((state) => state.showCounter);
+  const counter = useSelector((state) => state.counter.counter);
+  const show = useSelector((state) => state.counter.showCounter);
 
   // const incrementHandler = () => {
   //   dispatch({ type: "increment" });

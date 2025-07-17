@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 import { createSlice, configureStore } from "@reduxjs/toolkit";
 
-const initialState = { counter: 0, showCounter: true };
+const initialCounterState = { counter: 0, showCounter: true };
 
 // const counterReducer = (state = initialState, action) => {
 //   // We must always set all the other states when we update a piece of state
@@ -37,7 +37,7 @@ const initialState = { counter: 0, showCounter: true };
 
 const counterSlice = createSlice({
   name: "counter", // name is the identifier of the slice
-  initialState: initialState,
+  initialState: initialCounterState,
   reducers: {
     increment(state, action) {
       // here it seems we are allowd to mutate the state, we still must not manipulate the existing state but the good thing is when using Redux Toolkit and it's functions like createSlice we can't accidently manipulate the existing state because Redux Toolkit internally uses another package (imur) which will detect code like this and automitically clone the existing state, create a new state object, keep all the state which we are not editing and override the state we are editing in an immutable way
@@ -56,13 +56,32 @@ const counterSlice = createSlice({
   },
 });
 
+const initialAuthState = {
+  isAuthenticated: false,
+};
+
+const authSlice = createSlice({
+  name: "auth",
+  initialState: initialAuthState,
+  reducers: {
+    login(state) {
+      state.isAuthenticated = true;
+    },
+    logout(state) {
+      state.isAuthenticated = false;
+    },
+  },
+});
+
 const store = configureStore({
   reducer: {
     // as we only have 1 reducer for the store we can simple just pass the "counterSlice.reducer" without the object so just reducer: counterSlice.reducer
     counter: counterSlice.reducer,
+    auth: authSlice.reducer,
   },
 }); // configureStore like createStore creates a store but it makes merging mulitple reducers into one reducer easier thereafter
 
 export const counterActions = counterSlice.actions;
+export const authActions = authSlice.actions;
 
 export default store;
