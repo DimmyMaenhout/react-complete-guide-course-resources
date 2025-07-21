@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const uiSlice = createSlice({
   name: "ui",
   initialState: { cartIsVisible: false },
-  reducers: {
+  reducers: { // reducers must be pure, side-effect free, synchronous functions! input: Old State + action --> output: New State
     toggle(state, action) {
       state.cartIsVisible = !state.cartIsVisible;
     },

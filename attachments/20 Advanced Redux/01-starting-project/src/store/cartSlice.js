@@ -8,7 +8,7 @@ const initialCartState = {
 const cartSlice = createSlice({
   name: "cart",
   initialState: initialCartState,
-  reducers: {
+  reducers: { // reducers must be pure, side-effect free, synchronous functions! input: Old State + action --> output: New State
     addItemToCart(state, action) {
       // check if item already in cart, if not add the full item
       //   const result = state.items.find((item) => item.id === id);
