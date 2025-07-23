@@ -3,12 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialCartState = {
   items: [],
   totalQuantity: 0,
+  changed: false,
 };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState: initialCartState,
-  reducers: { // reducers must be pure, side-effect free, synchronous functions! input: Old State + action --> output: New State
+  reducers: {
+    // reducers must be pure, side-effect free, synchronous functions! input: Old State + action --> output: New State
     addItemToCart(state, action) {
       // check if item already in cart, if not add the full item
       //   const result = state.items.find((item) => item.id === id);
@@ -17,6 +19,7 @@ const cartSlice = createSlice({
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
       state.totalQuantity++;
+      state.changed = true;
 
       if (!existingItem) {
         state.items.push({
@@ -38,6 +41,7 @@ const cartSlice = createSlice({
       const id = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
       state.totalQuantity--;
+      state.changed = true;
 
       if (existingItem.quantity === 1) {
         state.items = state.items.filter((item) => item.id !== id);
