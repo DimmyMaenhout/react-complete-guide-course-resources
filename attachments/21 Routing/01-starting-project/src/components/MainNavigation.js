@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import classes from "./MainNavigation.module.css";
 
@@ -8,10 +8,25 @@ function MainNavigation() {
       <nav>
         <ul className={classes.list}>
           <li>
-            <Link to="/">Home</Link>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? classes.isActive : undefined
+              }
+              end // indicates that this link should only be considered active if the currently active path ends with this path
+            >
+              Home
+            </NavLink>
           </li>
           <li>
-            <Link to="/products">Products</Link>
+            <NavLink
+              to="/products"
+              className={({ isActive }) =>
+                isActive ? classes.isActive : undefined
+              }
+            >
+              Products
+            </NavLink>
           </li>
         </ul>
       </nav>
