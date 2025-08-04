@@ -22,28 +22,64 @@
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import EventsPage from "./pages/EventsPage";
-import EventsDetailPage from "./pages/EventsDetailPage";
+import EventsPage, { loader as eventsLoader } from "./pages/Events";
+import EventsDetailPage, {
+  loader as eventDetailLoader,
+  action as deleteEventAction,
+} from "./pages/EventsDetailPage";
 import NewEventPage from "./pages/NewEventPage";
 import EditEventPage from "./pages/EditEventPage";
 import RootLayout from "./pages/Root";
 import EventsRootLayout from "./pages/EventsRootPage";
+import ErrorPage from "./pages/Error";
+import NewsletterPage, { action as newsletterAction } from "./pages/Newsletter";
+import { action as manipulateEventAction } from "./components/EventForm";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />, // The error element will be shown on the screen, as a fallback  page in case of invalid route paths. That is one use case but not the only one, instead the error element will be shown to the screen whenever an error is generated in any route related code, including loaders
     children: [
       { index: true, element: <HomePage /> },
       {
         path: "events",
         element: <EventsRootLayout />,
         children: [
-          { index: true, element: <EventsPage /> },
-          { path: ":id", element: <EventsDetailPage /> },
-          { path: "new", element: <NewEventPage /> },
-          { path: ":id/edit", element: <EditEventPage /> },
+          {
+            index: true,
+            element: <EventsPage />,
+            loader: eventsLoader, // The loader for a page will be called right when we start navigating to that page, not after the page component has been rendered but before we actually go there.
+          }, // the loader function will be executed by a React router whenever we are about to visit this route. So just before this component is triggered this function will be executed by a React router
+          {
+            path: ":id",
+            // here we don't have an element because we don't want to have ant shared layout, instead we are using this approach because we want to add a loader here to this route
+            id: "event-detail", // this id is up to us
+            loader: eventDetailLoader,
+            children: [
+              {
+                index: true,
+                element: <EventsDetailPage />,
+                action: deleteEventAction,
+              },
+              {
+                path: "edit",
+                element: <EditEventPage />,
+                action: manipulateEventAction,
+              },
+            ],
+          },
+          {
+            path: "new",
+            element: <NewEventPage />,
+            action: manipulateEventAction,
+          },
         ],
+      },
+      {
+        path: "newsletter",
+        element: <NewsletterPage />,
+        action: newsletterAction,
       },
     ],
   },

@@ -1,43 +1,25 @@
-import { redirect, useRouteLoaderData, Await } from "react-router-dom";
-import EventItem from "../components/EventItem";
+import { useLoaderData, Await } from "react-router-dom";
+
 import EventsList from "../components/EventsList";
 import { Suspense } from "react";
 
-function EventsDetailPage() {
-  const { event, events } = useRouteLoaderData("event-detail");
-  return (
-    <>
-      <Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
-        <Await resolve={event}>
-          {(loadedEvent) => <EventItem event={loadedEvent} />}
-        </Await>
-      </Suspense>
+function EventsPage() {
+  const { events } = useLoaderData(); // we will always get the final data, we don't need to await it (normally it's a Promise but useLoaderData takes care of it so we get the actual data). userLoaderData can also be used in the EventsList component, it just can't be used on a higher lever than we're fetching the data.
 
-      <Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
-        <Await resolve={events}>
-          {(loadedEvents) => <EventsList events={loadedEvents} />}
-        </Await>
-      </Suspense>
-    </>
+  // if (data.isError) {
+  //   return <p>{data.message}</p>;
+  // }
+
+  return (
+    <Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
+      <Await resolve={events}>
+        {(loadedEvents) => <EventsList events={loadedEvents} />}
+      </Await>
+    </Suspense>
   );
 }
 
-export default EventsDetailPage;
-
-async function loadEvent(id) {
-  const response = await fetch("http://localhost:8080/events/" + id);
-
-  if (!response.ok) {
-    throw Response.json({
-      message: "could not fetch details for selected event.",
-      status: 500,
-    });
-  } else {
-    const resData = await response.json();
-    return resData.event;
-    // return response;
-  }
-}
+export default EventsPage;
 
 async function loadEvents() {
   const response = await fetch("http://localhost:8080/events");
@@ -72,29 +54,7 @@ async function loadEvents() {
   }
 }
 
-export async function loader({ request, params }) {
-  const id = params.id;
-
-  return {
-    event: await loadEvent(
-      id
-    ) /* if we have an async loader with the async function we can simply add the await keyword here and that will make sure that it waits for this data to be loaded before loading this page component at all, so before moving and navigating to this page component but will load the loadEvents data after the page was loaded */,
-    events: loadEvents(),
-  };
-}
-
-export async function action({ params, request }) {
-  const eventId = params.id;
-  const response = await fetch("http://localhost:8080/events/" + eventId, {
-    method: request.method,
-  });
-
-  if (!response.ok) {
-    throw Response.json({
-      message: "could not delete event.",
-      status: 500,
-    });
-  }
-
-  return redirect("/events");
+export function loader() {
+  // from Router v7 we can directly return an object that contains unresolved promises instead of  using "defer()"
+  return { events: loadEvents() };
 }
