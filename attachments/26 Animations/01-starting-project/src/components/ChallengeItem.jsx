@@ -29,7 +29,8 @@ export default function ChallengeItem({
   }
 
   return (
-    <li>
+    <motion.li layout exit={{ y: -30, opacity: 0 }}>
+      {/* Framer motion will automatically try to animate layout changes when the layout property is added  */}
       <article className="challenge-item">
         <header>
           <img {...challenge.image} />
@@ -66,6 +67,6 @@ export default function ChallengeItem({
           )}
         </div>
       </article>
-    </li>
+    </motion.li>
   );
 }
