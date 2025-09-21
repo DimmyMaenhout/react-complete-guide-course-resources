@@ -8,7 +8,7 @@ export default function InvestmentResultRow({
   investedCapital,
 }) {
   return (
-    <tr>
+    <tr key={year}>
       <td>{year}</td>
       <td>{formatter.format(investmentValue)}</td>
       <td>{formatter.format(interest)}</td>
